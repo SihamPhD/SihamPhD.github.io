@@ -39,6 +39,7 @@ navigator.serviceWorker.getRegistrations().then(function (e) {
       ("SKIP_WAITING" === e.data.type ||
         console.warn(`SW: Invalid message type: ${e.data.type}`));
   }),
+  
   self.addEventListener('install', (event) => {
     self.skipWaiting();
   });
@@ -48,20 +49,19 @@ navigator.serviceWorker.getRegistrations().then(function (e) {
   });
   
   self.addEventListener('fetch', (event) => {
-    event.respondWith(
-      (async function() {
-        const response = await fetch(event.request);
-        const newHeaders = new Headers(response.headers);
-        newHeaders.set('Cross-Origin-Opener-Policy', 'same-origin');
-        newHeaders.set('Cross-Origin-Embedder-Policy', 'require-corp');
-        const moddedResponse = new Response(response.body, {
-          status: response.status,
-          statusText: response.statusText,
-          headers: newHeaders
-        });
-        return moddedResponse;
-      })()
-    );
+    const url = new URL(event.request.url);
+  
+    if (url.origin === location.origin) {
+      const headers = new Headers(event.request.headers);
+      headers.set('Cross-Origin-Opener-Policy', 'same-origin');
+      headers.set('Cross-Origin-Embedder-Policy', 'require-corp');
+  
+      const modifiedRequest = new Request(event.request, {
+        headers: headers,
+      });
+  
+      event.respondWith(fetch(modifiedRequest));
+    }
   });
   workbox.precaching.precacheAndRoute([
     { revision: null, url: "/ohif/151.bundle.5d8090bf7e885f8f2384.js" },
