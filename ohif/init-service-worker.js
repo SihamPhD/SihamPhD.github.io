@@ -3,7 +3,7 @@ if (navigator.serviceWorker.getRegistrations().then((registrations) => {
       registration.unregister();
     }
   }), "function" == typeof importScripts) {
-    importScripts("https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-window.prod.mjs");
+    importScripts("https://storage.googleapis.com/workbox-cdn/releases/5.0.0-beta.1/workbox-window.prod.mjs");
     var supportsServiceWorker = "serviceWorker" in navigator,
         isNotLocalDevelopment = -1 === ["localhost", "127"].indexOf(location.hostname);
     if (supportsServiceWorker && isNotLocalDevelopment) {
