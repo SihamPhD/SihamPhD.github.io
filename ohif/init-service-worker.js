@@ -1,1 +1,22 @@
-if(navigator.serviceWorker.getRegistrations().then((function(e){for(let o of e)o.unregister()})),"function"==typeof importScripts){importScripts("https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-window.prod.mjs");var supportsServiceWorker="serviceWorker"in navigator,isNotLocalDevelopment=-1===["localhost","127"].indexOf(location.hostname);if(supportsServiceWorker&&isNotLocalDevelopment){const e=(window.PUBLIC_URL||"/")+"sw.js",o=new Workbox(e);o.addEventListener("waiting",(e=>{const r=!1===e.wasWaitingBeforeRegister;console.log("isFirstTimeUpdatedServiceWorkerIsWaiting",r),o.addEventListener("controlling",(e=>{window.location.reload()})),o.messageSW({type:"SKIP_WAITING"})})),o.register()}}
+if (navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (let registration of registrations) {
+      registration.unregister();
+    }
+  }), "function" == typeof importScripts) {
+    importScripts("https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-window.prod.mjs");
+    var supportsServiceWorker = "serviceWorker" in navigator,
+        isNotLocalDevelopment = -1 === ["localhost", "127"].indexOf(location.hostname);
+    if (supportsServiceWorker && isNotLocalDevelopment) {
+      const swUrl = (window.PUBLIC_URL || "/") + "sw.js";
+      const workbox = new Workbox(swUrl);
+      workbox.addEventListener("waiting", (event) => {
+        const isFirstTimeUpdatedServiceWorkerIsWaiting = !event.wasWaitingBeforeRegister;
+        console.log("isFirstTimeUpdatedServiceWorkerIsWaiting", isFirstTimeUpdatedServiceWorkerIsWaiting);
+        workbox.addEventListener("controlling", (event) => {
+          window.location.reload();
+        });
+        workbox.messageSW({ type: "SKIP_WAITING" });
+      });
+      workbox.register();
+    }
+  }
